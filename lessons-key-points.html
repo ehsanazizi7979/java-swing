@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java Swing Course — Key Points by Lesson</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-text: #1d4ed8;
+      --analogy-bg: #eff6ff;
+      --analogy-border: #93c5fd;
+      --tip-bg: #fffbeb;
+      --tip-border: #fcd34d;
+      --tip-text: #92400e;
+      --warn-bg: #fef2f2;
+      --warn-border: #fca5a5;
+      --warn-text: #991b1b;
+      --ok-bg: #f0fdf4;
+      --ok-border: #86efac;
+      --ok-text: #166534;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      --radius: 14px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-soft: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #1f2937;
+      --accent: #60a5fa;
+      --accent-soft: rgba(96, 165, 250, 0.16);
+      --accent-text: #93c5fd;
+      --analogy-bg: rgba(59, 130, 246, 0.12);
+      --analogy-border: rgba(96, 165, 250, 0.4);
+      --tip-bg: rgba(245, 158, 11, 0.12);
+      --tip-border: rgba(251, 191, 36, 0.4);
+      --tip-text: #fde68a;
+      --warn-bg: rgba(239, 68, 68, 0.12);
+      --warn-border: rgba(248, 113, 113, 0.4);
+      --warn-text: #fecaca;
+      --ok-bg: rgba(34, 197, 94, 0.12);
+      --ok-border: rgba(74, 222, 128, 0.4);
+      --ok-text: #bbf7d0;
+      --code-bg: #020617;
+      --code-text: #e2e8f0;
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    /* Header */
+    .hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 24px;
+    }
+
+    .hero-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.9rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--text-muted);
+      max-width: 680px;
+      font-size: 1.02rem;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 0.92rem;
+      min-width: 220px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+    }
+
+    /* Main Layout */
+    .layout {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static !important;
+      }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin: 0 0 10px 8px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-list a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-list a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-size: 0.76rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .progress-box {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-track {
+      height: 8px;
+      background: var(--surface-soft);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    /* Content Cards */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card h3 {
+      margin: 20px 0 8px 0;
+      font-size: 1.05rem;
+    }
+
+    /* Repo File Map */
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .file-item {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .file-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+      font-size: 0.93rem;
+      color: var(--accent-text);
+      margin-bottom: 4px;
+    }
+
+    .file-desc {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Flow Diagram */
+    .flow-diagram {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: var(--surface-soft);
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      font-size: 0.88rem;
+    }
+
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Lesson Header */
+    .lesson-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .lesson-tag {
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .file-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    .done-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .done-toggle input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .lesson-goal {
+      margin: 4px 0 16px 0;
+      color: var(--text-muted);
+      font-size: 1.02rem;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      padding: 13px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+      font-size: 0.94rem;
+    }
+
+    .callout-analogy {
+      background: var(--analogy-bg);
+      border-left: 4px solid var(--analogy-border);
+    }
+
+    .callout-warn {
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn-border);
+      color: var(--warn-text);
+    }
+
+    .callout-tip {
+      background: var(--tip-bg);
+      border-left: 4px solid var(--tip-border);
+      color: var(--tip-text);
+    }
+
+    .callout strong {
+      font-weight: 700;
+    }
+
+    /* Key Points List */
+    .key-points {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .key-points li {
+      margin-bottom: 9px;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88em;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 16px 18px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      margin: 12px 0;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    .code-comment {
+      color: #94a3b8;
+    }
+
+    /* Mini Live Demo */
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sim-window {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .sim-titlebar {
+      background: #e2e8f0;
+      padding: 7px 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #1e293b;
+    }
+
+    .sim-menubar {
+      background: #f8fafc;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 4px 12px;
+      font-size: 0.82rem;
+      display: flex;
+      gap: 16px;
+      color: #334155;
+    }
+
+    .sim-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Tahoma, sans-serif;
+      font-size: 14px;
+    }
+
+    .sim-table th {
+      background: #f1f5f9;
+      color: #0f172a;
+      text-align: left;
+      padding: 7px 12px;
+      border-bottom: 1px solid #cbd5e1;
+      border-right: 1px solid #e2e8f0;
+      font-weight: 600;
+    }
+
+    .sim-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      cursor: pointer;
+    }
+
+    .sim-row-normal {
+      background: #ffffff;
+    }
+    .sim-row-warning {
+      background: rgb(255, 220, 100);
+    }
+    .sim-row-critical {
+      background: rgb(255, 100, 100);
+    }
+    .sim-row-selected {
+      background: #2563eb !important;
+      color: #ffffff !important;
+    }
+
+    /* Cheat Sheet Table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .cheat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin-top: 10px;
+    }
+
+    .cheat-table th,
+    .cheat-table td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .cheat-table th {
+      background: var(--surface-soft);
+      font-weight: 700;
+    }
+
+    /* Quiz */
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    details.quiz-item {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+
+    details.quiz-item summary {
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    details.quiz-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.quiz-item summary::after {
+      content: "Show Answer";
+      font-size: 0.78rem;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      padding: 3px 9px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    details.quiz-item[open] summary::after {
+      content: "Hide";
+    }
+
+    .quiz-answer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.93rem;
+    }
+
+    .hidden-by-filter {
+      display: none !important;
+    }
+
+    @media print {
+      .sidebar, .toolbar, .sim-controls {
+        display: none !important;
+      }
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">Java Swing Course Study Guide</span>
+        <h1>Key Points for Each Lesson — In Simple Terms</h1>
+        <p>
+          A plain-English breakdown of every lesson built into this repository's
+          <strong>Stock Monitor</strong> desktop app (<code>StockApp.java</code>, <code>Stock.java</code>, and <code>AlarmCellRenderer.java</code>).
+        </p>
+      </div>
+      <div class="toolbar">
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Filter lessons (e.g. JTable, thread)..."
+          aria-label="Filter lessons"
+        />
+        <button class="btn" id="themeBtn" type="button">Dark Mode</button>
+        <button class="btn" onclick="window.print()" type="button">Print / PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <p class="sidebar-title">Course Contents</p>
+      <ul class="nav-list">
+        <li><a href="#overview"><span class="nav-num">0</span> Big Picture</a></li>
+        <li><a href="#lesson-1"><span class="nav-num">1</span> Window &amp; Startup</a></li>
+        <li><a href="#lesson-2"><span class="nav-num">2</span> Menus &amp; Clicks</a></li>
+        <li><a href="#lesson-3"><span class="nav-num">3</span> Data Model &amp; Enum</a></li>
+        <li><a href="#lesson-4"><span class="nav-num">4</span> Tables &amp; Scrolling</a></li>
+        <li><a href="#lesson-5"><span class="nav-num">5</span> Row Coloring</a></li>
+        <li><a href="#lesson-6"><span class="nav-num">6</span> Live Threads &amp; EDT</a></li>
+        <li><a href="#simulator"><span class="nav-num">★</span> App Preview</a></li>
+        <li><a href="#cheatsheet"><span class="nav-num">≡</span> Quick Cheat Sheet</a></li>
+        <li><a href="#quiz"><span class="nav-num">?</span> Quick Self-Check</a></li>
+      </ul>
+
+      <div class="progress-box">
+        <div>Lessons reviewed: <strong id="progressText">0 / 6</strong></div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+
+      <!-- Overview -->
+      <section class="card searchable" id="overview">
+        <h2>0. The Big Picture: What This Repo Builds</h2>
+        <p style="margin-top:4px; color:var(--text-muted);">
+          Instead of learning Swing parts in isolation, this course builds one real desktop app step by step:
+          a <strong>live Stock Monitor window</strong> that updates stock prices every second and highlights risky price jumps in yellow or red.
+        </p>
+
+        <div class="file-grid">
+          <div class="file-item">
+            <div class="file-name">src/Stock.java</div>
+            <p class="file-desc"><strong>The Data:</strong> Holds one stock's symbol, price, change, volume, and calculates whether its alarm is Normal, Warning, or Critical.</p>
+          </div>
+          <div class="file-item">
+            <div class="file-name">src/StockApp.java</div>
+            <p class="file-desc"><strong>The Window &amp; Brain:</strong> Creates the main window, top menu bar, data table, and the 1-second background price updater.</p>
+          </div>
+          <div class="file-item">
+            <div class="file-name">src/AlarmCellRenderer.java</div>
+            <p class="file-desc"><strong>The Painter:</strong> Colors each row white, yellow, or red depending on that stock's alarm level.</p>
+          </div>
+        </div>
+
+        <div class="flow-diagram" aria-label="How data flows through the app">
+          <span class="flow-step">1. Timer runs every 1s</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">2. Creates updated <code>Stock</code></span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">3. Sends to UI Thread (EDT)</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">4. Updates <code>TableModel</code></span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">5. <code>AlarmCellRenderer</code> paints colors</span>
+        </div>
+      </section>
+
+      <!-- Lesson 1 -->
+      <section class="card searchable" id="lesson-1">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 1</span>
+            <span class="file-badge">src/StockApp.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="1" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Creating Your First Window (<code>JFrame</code> &amp; Safe Startup)</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Open a real desktop window with a title, size, and working close button—and start it on the right thread.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> Think of <code>JFrame</code> as an empty picture frame on your desk. Before hanging it up (<code>setVisible(true)</code>), you pick its size, label it, and put everything inside it.
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong><code>extends JFrame</code> makes your class a window:</strong> Because <code>StockApp extends JFrame</code>, your app inherits ready-made window powers like a title bar, borders, minimize/maximize buttons, and resizing.</li>
+          <li><strong>Set 3 basic window settings in the constructor:</strong>
+            <ul>
+              <li><code>setTitle("Stock Monitor")</code> — puts text in the top title bar.</li>
+              <li><code>setSize(800, 500)</code> — sets width to 800 pixels and height to 500 pixels.</li>
+              <li><code>setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)</code> — tells Java to actually <em>quit the program</em> when you click the red <strong>X</strong> button (otherwise the window hides, but Java keeps running invisible in the background!).</li>
+            </ul>
+          </li>
+          <li><strong>Windows start invisible by default:</strong> Nothing appears on screen until you call <code>setVisible(true)</code>—do this <em>last</em> after building your menus and tables so the user doesn't see a half-built blank window.</li>
+          <li><strong>Start Swing using <code>SwingUtilities.invokeLater(...)</code>:</strong> Swing uses one special worker thread called the <strong>Event Dispatch Thread (EDT)</strong> to draw everything on screen. Starting your window inside <code>invokeLater</code> guarantees the UI is created safely on that thread.</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>public class StockApp extends JFrame {
+    public StockApp() {
+        setTitle("Stock Monitor");
+        setSize(800, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); <span class="code-comment">// Stop program when X is clicked</span>
+        ...
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {     <span class="code-comment">// Safely hand work to the UI thread</span>
+            public void run() {
+                new StockApp().setVisible(true);        <span class="code-comment">// Show window once ready</span>
+            }
+        });
+    }
+}</code></pre>
+
+        <div class="callout callout-warn">
+          <strong>Common Mistake to Avoid:</strong> Forgetting <code>JFrame.EXIT_ON_CLOSE</code>. Without it, closing the window leaves your background timer running forever until you force-stop it in IntelliJ.
+        </div>
+      </section>
+
+      <!-- Lesson 2 -->
+      <section class="card searchable" id="lesson-2">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 2</span>
+            <span class="file-badge">src/StockApp.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="2" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Menus, Click Events &amp; Popup Messages</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Add a top menu bar (<em>File &rarr; Exit</em>, <em>View &rarr; Refresh</em>) and make things happen when the user clicks an item.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> An <code>ActionListener</code> is like a doorbell wired to a button. It sits quietly doing nothing until someone clicks the menu item—then it immediately runs your <code>actionPerformed</code> code.
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong>Menus are built in 3 nested layers:</strong>
+            <ol>
+              <li><code>JMenuBar</code> — the horizontal strip across the top of the window.</li>
+              <li><code>JMenu</code> — a drop-down category name on that strip (like <strong>File</strong> or <strong>View</strong>).</li>
+              <li><code>JMenuItem</code> — an actual clickable command inside a menu (like <strong>Exit</strong> or <strong>Refresh</strong>).</li>
+            </ol>
+          </li>
+          <li><strong>Attach the menu bar with <code>setJMenuBar(...)</code>:</strong> Notice you use <code>setJMenuBar(bar)</code> rather than <code>add(bar)</code> so Swing reserves the special top slot of the window for it.</li>
+          <li><strong><code>addActionListener</code> reacts to clicks:</strong> You pass an object with an <code>actionPerformed(ActionEvent e)</code> method. Whatever is inside that method runs when the user clicks the item.</li>
+          <li><strong><code>JOptionPane.showMessageDialog(...)</code> shows quick popups:</strong> Great for alerts, confirmations, or placeholders (like <em>"Refresh coming in Step 2"</em>).</li>
+          <li><strong>Why <code>StockApp.this</code> instead of just <code>this</code>?</strong> Inside <code>new ActionListener() { ... }</code>, plain <code>this</code> refers to the listener itself, <em>not</em> your window! Writing <code>StockApp.this</code> tells Java: <em>"center this popup over my main StockApp window."</em></li>
+          <li><strong>Clean exit:</strong> Before calling <code>System.exit(0)</code>, the Exit menu calls <code>executor.shutdown()</code> to politely stop the background timer thread.</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>JMenu viewMenu = new JMenu("View");
+JMenuItem refreshItem = new JMenuItem("Refresh");
+refreshItem.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        <span class="code-comment">// StockApp.this points to the outer JFrame window</span>
+        JOptionPane.showMessageDialog(StockApp.this, "Refresh coming in Step 2");
+    }
+});
+viewMenu.add(refreshItem);</code></pre>
+
+        <div class="callout callout-tip">
+          <strong>Modern Java Bonus Tip:</strong> Since your project uses JDK 17, <code>new ActionListener() { public void actionPerformed(ActionEvent e) { ... } }</code> can also be written in one short lambda line: <code>refreshItem.addActionListener(e -&gt; JOptionPane.showMessageDialog(this, "..."));</code> — and inside a lambda, plain <code>this</code> automatically means <code>StockApp</code>!
+        </div>
+      </section>
+
+      <!-- Lesson 3 -->
+      <section class="card searchable" id="lesson-3">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 3</span>
+            <span class="file-badge">src/Stock.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="3" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Modeling Your Data Cleanly (<code>Stock</code> &amp; <code>enum</code>)</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Keep business data and rules in their own plain Java class (<code>Stock.java</code>) instead of tangling math inside window code.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> <code>Stock.java</code> is an ID card for a single stock. It doesn't know anything about windows, colors, or buttons—it only knows its own numbers and whether its price swing is safe or dangerous.
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong>Separate Data from UI:</strong> <code>Stock.java</code> doesn't even import <code>javax.swing.*</code>! Keeping data classes independent makes your code much easier to test, read, and reuse.</li>
+          <li><strong>Use an <code>enum</code> for fixed states:</strong> Instead of error-prone strings like <code>"critical"</code> vs <code>"CRTICAL"</code> (typos!), <code>enum AlarmLevel { NORMAL, WARNING, CRITICAL }</code> restricts values to 3 exact choices checked by the compiler.</li>
+          <li><strong>Calculate derived rules automatically in the constructor:</strong> Whenever a <code>new Stock(...)</code> is created, it immediately runs <code>computeAlarm()</code> so the alarm level can never get out of sync with <code>change</code>:
+            <ul>
+              <li><code>CRITICAL</code>: price dropped by <code>100+</code> (<code>&lt;= -100</code>) or jumped by <code>200+</code> (<code>&gt;= 200</code>).</li>
+              <li><code>WARNING</code>: price dropped by <code>30+</code> (<code>&lt;= -30</code>) or jumped by <code>100+</code> (<code>&gt;= 100</code>).</li>
+              <li><code>NORMAL</code>: anything gentler in between.</li>
+            </ul>
+          </li>
+          <li><strong>Encapsulation (Private fields + Getters, no Setters):</strong> Fields like <code>price</code> are <code>private</code> so outside code cannot accidentally corrupt them (for example, changing <code>change</code> without recalculating <code>alarmLevel</code>). To update a stock, you create a fresh <code>Stock</code> object.</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>public enum AlarmLevel {
+    NORMAL, WARNING, CRITICAL
+}
+
+private AlarmLevel computeAlarm() {
+    if (change &lt;= -100 || change &gt;= 200) return AlarmLevel.CRITICAL;
+    if (change &lt;= -30  || change &gt;= 100) return AlarmLevel.WARNING;
+    return AlarmLevel.NORMAL;
+}</code></pre>
+      </section>
+
+      <!-- Lesson 4 -->
+      <section class="card searchable" id="lesson-4">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 4</span>
+            <span class="file-badge">src/StockApp.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="4" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Showing Data in a Table (<code>JTable</code>, <code>DefaultTableModel</code> &amp; <code>JScrollPane</code>)</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Display a list of stocks in neat rows and columns with headers and scrollbars.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> Swing splits tables into two jobs: <code>DefaultTableModel</code> is the <strong>Excel file holding the numbers</strong>, and <code>JTable</code> is the <strong>monitor displaying that file</strong>. When you change a number in the model, the table automatically updates on screen.
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong>Model vs. View split:</strong>
+            <ul>
+              <li><code>DefaultTableModel</code> stores column names (<code>"Symbol"</code>, <code>"Price"</code>, etc.) and row data. You add rows with <code>tableModel.addRow(new Object[]{ ... })</code>.</li>
+              <li><code>JTable</code> takes that model (<code>new JTable(tableModel)</code>) and draws the grid on screen.</li>
+            </ul>
+          </li>
+          <li><strong>Always wrap <code>JTable</code> inside a <code>JScrollPane</code>:</strong> Notice <code>add(new JScrollPane(table), BorderLayout.CENTER)</code>. In Swing, if you add a <code>JTable</code> directly to a window <em>without</em> a <code>JScrollPane</code>, <strong>the column header row ("Symbol", "Price"...) won't even show up</strong>, and overflowing rows won't scroll!</li>
+          <li><strong><code>BorderLayout.CENTER</code> makes the table fill the window:</strong> Every <code>JFrame</code> uses <code>BorderLayout</code> by default (North, South, East, West, Center). Putting the scroll pane in <code>CENTER</code> makes the table automatically stretch when you resize the window.</li>
+          <li><strong>Easy visual polish:</strong> <code>table.setFont(...)</code> and <code>table.setRowHeight(24)</code> make rows comfortable to read instead of cramped.</li>
+          <li><strong>Smart starter test data:</strong> Look at your 5 starter stocks in <code>buildTable()</code>: <code>MSMI</code> has change <code>-45.0</code> (Warning) and <code>FOLD</code> has change <code>200.0</code> (Critical), so you immediately see all 3 states on startup!</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>String[] columns = {"Symbol", "Price", "Change", "Volume", "Alarm"};
+tableModel = new DefaultTableModel(columns, 0); <span class="code-comment">// 0 = start with zero rows</span>
+
+for (Stock s : stocks) {
+    tableModel.addRow(new Object[]{
+        s.getSymbol(), s.getPrice(), s.getChange(), s.getVolume(), s.getAlarmLevel()
+    });
+}
+
+table = new JTable(tableModel);
+add(new JScrollPane(table), BorderLayout.CENTER); <span class="code-comment">// Gives headers + scrollbars + auto-resize</span></code></pre>
+
+        <div class="callout callout-warn">
+          <strong>Common Mistake to Avoid:</strong> Calling <code>add(table)</code> instead of <code>add(new JScrollPane(table))</code>—the #1 reason beginners wonder "Where did my column titles go?!"
+        </div>
+      </section>
+
+      <!-- Lesson 5 -->
+      <section class="card searchable" id="lesson-5">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 5</span>
+            <span class="file-badge">src/AlarmCellRenderer.java</span>
+            <span class="file-badge">src/StockApp.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="5" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Custom Row Coloring (<code>DefaultTableCellRenderer</code>)</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Color entire rows Red for Critical stocks, Yellow for Warning stocks, and White for Normal stocks.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> If a table has 10,000 cells, creating 10,000 separate label objects would waste tons of memory. Instead, Swing uses <strong>one single "rubber stamp"</strong> (<code>AlarmCellRenderer</code>): for each cell, it dips the stamp in the right color, stamps that cell onto the screen, and moves to the next cell!
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong>Extend <code>DefaultTableCellRenderer</code>:</strong> Instead of painting pixels from scratch, you extend Swing's built-in cell renderer and override <code>getTableCellRendererComponent(...)</code>.</li>
+          <li><strong>Always call <code>super.getTableCellRendererComponent(...)</code> first:</strong> That parent call puts the cell's text, font, border, and selection colors in place. Then you only tweak the background color!</li>
+          <li><strong>Look up the row's alarm level:</strong> Using the <code>row</code> index passed by Swing, <code>stocks.get(row).getAlarmLevel()</code> checks the alarm status of that whole stock row—so <em>every</em> column in row 2 gets colored red, not just the "Alarm" column.</li>
+          <li><strong>Respect <code>if (!isSelected)</code>:</strong> When a user clicks a row to select it, Swing highlights that row in selection blue. Checking <code>if (!isSelected)</code> prevents your white/yellow/red background from hiding the user's click highlight!</li>
+          <li><strong>Always include a <code>default: Color.WHITE</code> case:</strong> Remember the "rubber stamp" analogy! Because the <em>same</em> component is reused for every cell, if row 1 painted the stamp Red and row 2 didn't reset it back to <code>Color.WHITE</code>, row 2 would accidentally get stamped Red too!</li>
+          <li><strong>Attach to every column:</strong> In <code>StockApp.java</code>, a small loop attaches the renderer to columns <code>0..4</code> via <code>table.getColumnModel().getColumn(i).setCellRenderer(renderer)</code>.</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>Component c = super.getTableCellRendererComponent(
+        table, value, isSelected, hasFocus, row, column);
+
+Stock.AlarmLevel level = stocks.get(row).getAlarmLevel();
+
+if (!isSelected) {
+    switch (level) {
+        case CRITICAL: c.setBackground(new Color(255, 100, 100)); break; <span class="code-comment">// Soft Red</span>
+        case WARNING:  c.setBackground(new Color(255, 220, 100)); break; <span class="code-comment">// Soft Yellow</span>
+        default:       c.setBackground(Color.WHITE); break;              <span class="code-comment">// Reset stamp!</span>
+    }
+}
+return c;</code></pre>
+      </section>
+
+      <!-- Lesson 6 -->
+      <section class="card searchable" id="lesson-6">
+        <div class="lesson-top">
+          <div class="badges">
+            <span class="lesson-tag">Lesson 6</span>
+            <span class="file-badge">src/StockApp.java</span>
+          </div>
+          <label class="done-toggle">
+            <input type="checkbox" class="lesson-check" data-lesson="6" />
+            Mark as understood
+          </label>
+        </div>
+        <h2>Live Background Updates &amp; Thread Safety</h2>
+        <p class="lesson-goal">
+          <strong>Simple goal:</strong> Update stock prices automatically every 1 second in the background without freezing the window or crashing Swing.
+        </p>
+
+        <div class="callout callout-analogy">
+          <strong>Simple Analogy:</strong> Imagine a restaurant with <strong>one waiter</strong> (the UI Thread / EDT) who takes customer clicks and draws the screen.
+          If that waiter stands in the kitchen waiting 1 second at a time (<code>Thread.sleep</code>), nobody can click menus or move the window—the whole app freezes!
+          Instead, you hire a <strong>kitchen timer helper</strong> (<code>ScheduledExecutorService</code>) to calculate new prices in the back, and pass tiny sticky notes (<code>SwingUtilities.invokeLater</code>) to the waiter to update the screen.
+        </div>
+
+        <h3>Key Points in Simple Terms</h3>
+        <ul class="key-points">
+          <li><strong>Swing's Two Golden Thread Rules:</strong>
+            <ol>
+              <li><strong>Never do slow or repeating waits on the UI thread</strong> (or the window freezes and stops responding).</li>
+              <li><strong>Never modify Swing components directly from a background thread</strong> (Swing is not thread-safe; always hop back to the UI thread first).</li>
+            </ol>
+          </li>
+          <li><strong><code>ScheduledExecutorService</code> runs code on a schedule:</strong> <code>Executors.newSingleThreadScheduledExecutor()</code> creates one background worker, and <code>scheduleAtFixedRate(..., 1, 1, TimeUnit.SECONDS)</code> waits 1 second, then calls <code>updatePrices()</code> every 1 second.</li>
+          <li><strong><code>SwingUtilities.invokeLater(...)</code> safely updates the table:</strong> Once the new price is calculated on the background thread, <code>invokeLater</code> queues a tiny task onto the UI thread to call <code>tableModel.setValueAt(newValue, row, column)</code>.</li>
+          <li><strong>Why call <code>table.repaint()</code>?</strong> <code>setValueAt</code> updates cells in columns 1, 2, and 4, which only repaints those specific cells. Calling <code>table.repaint()</code> tells the whole table (including columns 0 "Symbol" and 3 "Volume") to redraw immediately if a row's alarm color just changed!</li>
+          <li><strong>Why <code>final int row = i;</code> and <code>final Stock s = updated;</code>?</strong> Because the <code>for</code> loop keeps moving to the next stock (<code>i++</code>) before <code>invokeLater</code> runs on the UI thread, Java requires variables captured inside an anonymous inner class (<code>new Runnable()</code>) to be <code>final</code> snapshots of that exact loop step.</li>
+        </ul>
+
+        <h3>From Your Code</h3>
+<pre><code>private void startLiveFeed() {
+    executor = Executors.newSingleThreadScheduledExecutor();
+    executor.scheduleAtFixedRate(new Runnable() {
+        public void run() {
+            updatePrices(); <span class="code-comment">// Runs in the background every 1 second</span>
+        }
+    }, 1, 1, TimeUnit.SECONDS);
+}
+
+<span class="code-comment">// Inside updatePrices(): hop back to the UI thread to touch the table</span>
+final int row = i;
+final Stock s = updated;
+SwingUtilities.invokeLater(new Runnable() {
+    public void run() {
+        tableModel.setValueAt(s.getPrice(), row, 1);
+        tableModel.setValueAt(s.getChange(), row, 2);
+        tableModel.setValueAt(s.getAlarmLevel(), row, 4);
+        table.repaint();
+    }
+});</code></pre>
+
+        <div class="callout callout-tip">
+          <strong>Extra Thread-Safety Tip for Step 2:</strong> Right now <code>stocks.set(i, updated)</code> happens just <em>before</em> <code>invokeLater</code>, while <code>AlarmCellRenderer</code> reads <code>stocks.get(row)</code> on the UI thread. Moving <code>stocks.set(row, s)</code> <em>inside</em> <code>SwingUtilities.invokeLater</code> guarantees both reading and writing of <code>stocks</code> happen on the exact same UI thread!
+        </div>
+      </section>
+
+      <!-- Interactive App Simulator -->
+      <section class="card searchable" id="simulator">
+        <div class="sim-header">
+          <div>
+            <h2 style="margin-bottom:2px;">Visual Preview: How Your App Behaves</h2>
+            <p style="margin:0; font-size:0.92rem; color:var(--text-muted);">
+              Click a row to see how <code>!isSelected</code> keeps the blue selection highlight, or toggle the 1-second live feed!
+            </p>
+          </div>
+          <div class="sim-controls" style="display:flex; gap:8px;">
+            <button class="btn btn-primary" id="simToggleBtn" type="button">Pause Live Feed</button>
+            <button class="btn" id="simStepBtn" type="button">Step +1s</button>
+            <button class="btn" id="simSpikeBtn" type="button">Trigger Big Swing</button>
+          </div>
+        </div>
+
+        <div class="sim-window">
+          <div class="sim-titlebar">
+            <span>Stock Monitor (JFrame — 800 &times; 500)</span>
+            <span style="font-weight:400; font-size:0.78rem;">EDT + 1s ScheduledExecutorService</span>
+          </div>
+          <div class="sim-menubar">
+            <span>File</span>
+            <span style="cursor:pointer; text-decoration:underline;" onclick="alert('Refresh coming in Step 2')">View (click Refresh demo)</span>
+          </div>
+          <table class="sim-table" id="simTable">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Change</th>
+                <th>Volume</th>
+                <th>Alarm</th>
+              </tr>
+            </thead>
+            <tbody id="simBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Cheat Sheet -->
+      <section class="card searchable" id="cheatsheet">
+        <h2>Quick-Reference Cheat Sheet</h2>
+        <p style="margin-top:4px; color:var(--text-muted);">
+          Every Swing &amp; Java class used in your project, explained in one plain sentence.
+        </p>
+        <div class="table-wrap">
+          <table class="cheat-table">
+            <thead>
+              <tr>
+                <th>Class / Method</th>
+                <th>Plain-English Job</th>
+                <th>Used In</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>JFrame</code></td>
+                <td>The main desktop window with a title bar, borders, and close button.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>JMenuBar</code> / <code>JMenu</code> / <code>JMenuItem</code></td>
+                <td>Top menu strip &rarr; dropdown category &rarr; clickable menu command.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>ActionListener</code></td>
+                <td>Waits for a button or menu click, then runs <code>actionPerformed(...)</code>.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>JOptionPane</code></td>
+                <td>Pops up a ready-made message, warning, or question dialog box.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>DefaultTableModel</code></td>
+                <td>Stores the table's column names and row values (the spreadsheet data).</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>JTable</code></td>
+                <td>Draws the rows and columns from a <code>TableModel</code> onto the screen.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>JScrollPane</code></td>
+                <td>Adds scrollbars to a component and makes <code>JTable</code> column headers visible.</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>DefaultTableCellRenderer</code></td>
+                <td>The reusable "rubber stamp" that customizes how each table cell looks (colors, fonts).</td>
+                <td><code>AlarmCellRenderer.java</code></td>
+              </tr>
+              <tr>
+                <td><code>ScheduledExecutorService</code></td>
+                <td>Runs a task repeatedly on a background timer (e.g., every 1 second).</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+              <tr>
+                <td><code>SwingUtilities.invokeLater</code></td>
+                <td>Safely sends UI changes onto Swing's single Event Dispatch Thread (EDT).</td>
+                <td><code>StockApp.java</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Self-Check Quiz -->
+      <section class="card searchable" id="quiz">
+        <h2>Quick Self-Check (1 Question per Lesson)</h2>
+        <p style="margin-top:4px; color:var(--text-muted);">
+          Try answering in your head first, then click each question to check!
+        </p>
+        <div class="quiz-list">
+          <details class="quiz-item">
+            <summary>1. What happens if you forget setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)?</summary>
+            <div class="quiz-answer">
+              Clicking the window's X button only <strong>hides</strong> the window—the Java program (and your 1-second background timer!) keeps running invisibly in the background.
+            </div>
+          </details>
+          <details class="quiz-item">
+            <summary>2. Inside an ActionListener, why did the code write StockApp.this instead of just this?</summary>
+            <div class="quiz-answer">
+              Because inside <code>new ActionListener() { ... }</code>, plain <code>this</code> refers to the <code>ActionListener</code> object itself. <code>StockApp.this</code> reaches out to the outer <code>JFrame</code> window so the popup dialog centers over your window.
+            </div>
+          </details>
+          <details class="quiz-item">
+            <summary>3. Why use enum AlarmLevel instead of Strings like "NORMAL" or "CRITICAL"?</summary>
+            <div class="quiz-answer">
+              An <code>enum</code> prevents spelling mistakes—Java checks at compile time that only <code>NORMAL</code>, <code>WARNING</code>, or <code>CRITICAL</code> can ever be used.
+            </div>
+          </details>
+          <details class="quiz-item">
+            <summary>4. What goes wrong if you add a JTable directly to a JFrame without a JScrollPane?</summary>
+            <div class="quiz-answer">
+              Two things: you get <strong>no scrollbars</strong> when there are many rows, and the <strong>column headers ("Symbol", "Price", ...) disappear</strong>!
+            </div>
+          </details>
+          <details class="quiz-item">
+            <summary>5. In AlarmCellRenderer, why must default set the background back to Color.WHITE?</summary>
+            <div class="quiz-answer">
+              Swing reuses the <em>same</em> renderer object like a rubber stamp for every cell. If a critical row sets the background to red and the next normal row doesn't reset it to white, the normal row would get painted red too!
+            </div>
+          </details>
+          <details class="quiz-item">
+            <summary>6. Why can't updatePrices() just use while(true) + Thread.sleep(1000) directly on the UI thread?</summary>
+            <div class="quiz-answer">
+              Because Swing has only one UI thread (the EDT) for drawing and clicks. Sleeping on it freezes the entire window—menus won't open, rows won't select, and the X button won't even respond.
+            </div>
+          </details>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // 1. Theme Toggle
+    const themeBtn = document.getElementById('themeBtn');
+    const savedTheme = localStorage.getItem('swingGuideTheme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeBtn.textContent = 'Light Mode';
+    }
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('swingGuideTheme', 'light');
+        themeBtn.textContent = 'Dark Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('swingGuideTheme', 'dark');
+        themeBtn.textContent = 'Light Mode';
+      }
+    });
+
+    // 2. Lesson Progress Checkboxes
+    const checks = document.querySelectorAll('.lesson-check');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const savedProgress = JSON.parse(localStorage.getItem('swingGuideProgress') || '{}');
+
+    function updateProgress() {
+      let done = 0;
+      const state = {};
+      checks.forEach(ch => {
+        if (ch.checked) done++;
+        state[ch.dataset.lesson] = ch.checked;
+      });
+      localStorage.setItem('swingGuideProgress', JSON.stringify(state));
+      progressText.textContent = `${done} / ${checks.length}`;
+      progressFill.style.width = `${(done / checks.length) * 100}%`;
+    }
+
+    checks.forEach(ch => {
+      if (savedProgress[ch.dataset.lesson]) ch.checked = true;
+      ch.addEventListener('change', updateProgress);
+    });
+    updateProgress();
+
+    // 3. Search / Filter
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.searchable');
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      cards.forEach(card => {
+        if (!q || card.textContent.toLowerCase().includes(q)) {
+          card.classList.remove('hidden-by-filter');
+        } else {
+          card.classList.add('hidden-by-filter');
+        }
+      });
+    });
+
+    // 4. Mini Stock Monitor Simulator (exact thresholds & starter stocks from StockApp.java & Stock.java)
+    const stocks = [
+      { symbol: 'IKCO', price: 1250.0, change: 12.5, volume: 340000 },
+      { symbol: 'MSMI', price: 3800.0, change: -45.0, volume: 120000 },
+      { symbol: 'FOLD', price: 8900.0, change: 200.0, volume: 75000 },
+      { symbol: 'TPPH', price: 4300.0, change: 0.0, volume: 200000 },
+      { symbol: 'us30', price: 43000.0, change: 0.5, volume: 2000000 }
+    ];
+
+    function computeAlarm(change) {
+      if (change <= -100 || change >= 200) return 'CRITICAL';
+      if (change <= -30 || change >= 100) return 'WARNING';
+      return 'NORMAL';
+    }
+
+    let selectedRow = -1;
+    const simBody = document.getElementById('simBody');
+
+    function renderSim() {
+      simBody.innerHTML = '';
+      stocks.forEach((s, idx) => {
+        const alarm = computeAlarm(s.change);
+        const tr = document.createElement('tr');
+        if (idx === selectedRow) {
+          tr.className = 'sim-row-selected';
+        } else if (alarm === 'CRITICAL') {
+          tr.className = 'sim-row-critical';
+        } else if (alarm === 'WARNING') {
+          tr.className = 'sim-row-warning';
+        } else {
+          tr.className = 'sim-row-normal';
+        }
+        tr.addEventListener('click', () => {
+          selectedRow = (selectedRow === idx) ? -1 : idx;
+          renderSim();
+        });
+        tr.innerHTML = `
+          <td>${s.symbol}</td>
+          <td>${s.price.toFixed(2)}</td>
+          <td>${s.change >= 0 ? '+' : ''}${s.change.toFixed(2)}</td>
+          <td>${s.volume.toLocaleString()}</td>
+          <td>${alarm}</td>
+        `;
+        simBody.appendChild(tr);
+      });
+    }
+
+    function stepPrices(multiplier = 100) {
+      stocks.forEach(s => {
+        const delta = (Math.random() - 0.5) * multiplier;
+        s.price = Math.max(10, s.price + delta);
+        s.change = delta;
+      });
+      renderSim();
+    }
+
+    let running = true;
+    let timerId = setInterval(() => stepPrices(100), 1000);
+    const simToggleBtn = document.getElementById('simToggleBtn');
+
+    simToggleBtn.addEventListener('click', () => {
+      running = !running;
+      if (running) {
+        timerId = setInterval(() => stepPrices(100), 1000);
+        simToggleBtn.textContent = 'Pause Live Feed';
+      } else {
+        clearInterval(timerId);
+        simToggleBtn.textContent = 'Resume Live Feed';
+      }
+    });
+
+    document.getElementById('simStepBtn').addEventListener('click', () => {
+      stepPrices(100);
+    });
+
+    document.getElementById('simSpikeBtn').addEventListener('click', () => {
+      // Uses a wider swing (-250..+250) so students can see WARNING & CRITICAL trigger live!
+      stepPrices(500);
+    });
+
+    renderSim();
+  </script>
+</body>
+</html>
